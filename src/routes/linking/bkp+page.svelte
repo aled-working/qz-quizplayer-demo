@@ -1,111 +1,137 @@
 <script>
+
+/* youtube  https://www.youtube.com/watch?v=aZzGvfnw8Zw */
+// https://medium.com/codex/things-ive-learned-building-a-drag-drop-component-with-svelte-2ad9169f1aff
+//https://svelte.dev/examples/animate
+
 const dummyLinked = {
-    answer: {
-        q00: 'op05',
-        q01: 'op04',
-        q02: 'op03',
-        q03: 'op02',
-        q04: 'op01',
-        q01: 'op00',
+    correctAnswer: {
+        qCat00: 'op02',
+        qCat01: 'op04',
+        qCat02: 'op01',
+        qCat03: 'op05',
+        qCat04: 'op03',
+        qCat05: 'op00',
     },
     type: 'linked',
     qText: 'Which ones match?',
-    qImg: null,
 
     qCategories: [
         { 
             qCatText: 'Heart',
-            qCatImg: null,
             qCatId: 'qCat00'
         },
         { 
             qCatText: 'Root',
-            qCatImg: null,
             qCatId: 'qCat01'
         },
         { 
             qCatText: 'Leaf',
-            qCatImg: null,
             qCatId: 'qCat02'
         },
         { 
             qCatText: 'Digestion',
-            qCatImg: null,
             qCatId: 'qCat03'
         },
         { 
             qCatText: 'Nutrient',
-            qCatImg: null,
             qCatId: 'qCat04'
         },
         { 
             qCatText: 'Skeleton',
-            qCatImg: null,
             qCatId: 'qCat05'
         },
 ],
     options: [
         { 
             opText: 'A framework of bones that hold together a plant or animal',
-            opImg: null,
             opId: 'op00'
         },
         { 
             opText: 'A green part of a plant attached to the stem, where gases enter and leave the plant',
-            opImg: null,
             opId: 'op01'
         },
         { 
             opText: 'A large muscle that pumps blood around the body',
-            opImg: null,
             opId: 'op02'
         },
         { 
             opText: 'A substance that is essential for an organism to grow and live',
-            opImg: null,
             opId: 'op03'
         },
         { 
             opText: 'The part of a plant which attaches it to the ground, and allows the plant to absorb water and nutrients',
-            opImg: null,
             opId: 'op04'
         },
         { 
             opText: 'The process of breaking down food into nutrients that can be absorbed by the body',
-            opImg: null,
             opId: 'op05'
         },
 ]
 } // end dummy data
 
-function allowDrop(ev) {
-  ev.preventDefault();
-  console.log('allowDrop',ev)
+
+let whichCat = false
+let whichOption = false
+let userAnswer = {}
+let userAnswerLookup = {}
+let optionsState = {}
+let whichCatText = false
+let qWrapClass = '' //// ????
+
+function start(cat){
+    whichCat = cat
+    qWrapClass = 'started'
+//console.log('start', cat, whichCat);
+}
+function match(option){
+    if (!whichCat) return
+
+    // collect user answers until complete..., 
+    userAnswer[whichCat] = option
+    optionsState[option]= whichCat ////////
+    console.log('optionsState',optionsState); /////
+
+
+    let numCats = dummyLinked.qCategories.length
+    let numUserAnswersSoFar = Object.keys(userAnswer).length
+    if (numUserAnswersSoFar === numCats) {
+        //then check against dummyLinked.correctAnswer
+        let numCorrect = 0
+        Object.keys(userAnswer).forEach(k=> {if(userAnswer[k] === dummyLinked.correctAnswer[k])
+                {numCorrect +=1}})
+        if (numCorrect === numCats)     console.log('SUCCESS');   
+        if (numCorrect !== numCats)     console.log('NOT QUITE');   
+    }
+    //reset
+    whichCat = false
+}
+function cancel(){
+console.log('cancel');
 }
 
-function drag(ev) {
-    console.log('drag',ev)
-    ev.preventDefault();
-}
 
-function drop(ev) {
-  ev.preventDefault();
-  console.log('drop',ev)
-}
 
 </script>
 
+<div class={`qWrap center column ${qWrapClass}`}>
 
-<h1>{dummyLinked.qText}</h1>
+    <h1>{dummyLinked.qText}</h1>
 
 
 <div class="categories center">
     {#each dummyLinked.qCategories as qCat}
         <div 
         id={qCat.qCatId}
+        class={qCat.qCatId === whichCat ? 'selected' : ''}
         draggable="true"
-        on:dragstart={ev => drag(ev) }
+        on:pointerdown={()=>{start(qCat.qCatId)}}
         >
+        {#if dummyLinked.options.find(op=> op.userCat===whichCat)}
+        <h1 
+        class='btn faint'>{qCat.qCatText}
+        </h1>
+        {/if}
         <h1 
         class='btn'>{qCat.qCatText}
         </h1>
@@ -117,22 +143,37 @@ function drop(ev) {
 
 <div class="optionsForLinking center">
     {#each dummyLinked.options as option}
+        
         <div 
         id={option.opId} 
-        class='option big bold rounded center'
-        on:drop={ev => drop(ev)}
-        on:dragover={ev => allowDrop(ev) }
-        >{option.opText}
+        class='option big bold rounded center column'
+        on:pointerdown={
+            ()=>{
+                option.userCat = dummyLinked.qCategories.find(qCat => qCat.qCatId === whichCat ).qCatText
+                match(option.opId)
+            } }
+        >
+        {#if (option.userCat )}
+            <h1 class='btn'>
+            {option.userCat}
+            </h1>
+         {/if}   
+        {option.opText}
     </div>
     {/each}
 </div>
+</div>
+
 
 <style>
+.qWrap{
+    gap: 2rem
+    }
 .categories{
     gap: .3rem;
     flex-wrap: wrap;
     max-width: 50rem;
-
+    cursor: grab;
 }
 .optionsForLinking{
     gap: 1rem;
@@ -146,6 +187,12 @@ function drop(ev) {
     border: 2px dashed #ffffff33;
     padding: .5rem;
     width: 15rem
+}
+.optionsForLinking .option:hover{
+    border: 2px solid yellow
+}
+.selected h1 {
+    background: yellow
 }
 
 </style>

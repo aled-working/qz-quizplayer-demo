@@ -5,13 +5,21 @@
 //https://svelte.dev/examples/animate
 
 const dummyLinked = {
-    correctAnswer: {
+    /* correctAnswer: {
         qCat00: 'op02',
         qCat01: 'op04',
         qCat02: 'op01',
         qCat03: 'op05',
         qCat04: 'op03',
         qCat05: 'op00',
+    }, */
+    correctAnswer: {
+        op00:'Skeleton',
+        op01:'Leaf',
+        op02:'Heart',
+        op03:'Nutrient',
+        op04:'Root',
+        op05:'Digestion',
     },
     type: 'linked',
     qText: 'Which ones match?',
@@ -71,74 +79,62 @@ const dummyLinked = {
 } // end dummy data
 
 
-let userAnswer = {}
-let userAnswerLookup = {}
-let optionsState = {}
 let whichCat = false
-let whichCatText = false
-let qWrapClass = '' //// ????
+let studentAnswer = {}
 
-function start(cat){
-    whichCat = cat
-    qWrapClass = 'started'
-//console.log('start', cat, whichCat);
-}
-function match(option){
-    if (!whichCat) return
+function checkAnswer(){
+    //used all the cats?
+    if (Object.keys(studentAnswer).length !== Object.keys(dummyLinked.correctAnswer).length) return
 
-    // collect user answers until complete..., 
-    userAnswer[whichCat] = option
-    optionsState[option]= whichCat ////////
-    console.log('optionsState',optionsState); /////
+    //compare
+    let numCorrectMatches = Object.keys(studentAnswer).filter( key => studentAnswer[key] === dummyLinked.correctAnswer[key]).length
 
-
-    let numCats = dummyLinked.qCategories.length
-    let numUserAnswersSoFar = Object.keys(userAnswer).length
-    if (numUserAnswersSoFar === numCats) {
-        //then check against dummyLinked.correctAnswer
-        let numCorrect = 0
-        Object.keys(userAnswer).forEach(k=> {if(userAnswer[k] === dummyLinked.correctAnswer[k])
-                {numCorrect +=1}})
-        if (numCorrect === numCats)     console.log('SUCCESS');   
-        if (numCorrect !== numCats)     console.log('NOT QUITE');   
+    // announce
+    if (numCorrectMatches === Object.keys(dummyLinked.correctAnswer).length) {
+        console.log('WOOHOO')
+    }else{
+        console.log('NOT QUITE RIGHT')
     }
-    //reset
-    whichCat = false
 }
-function cancel(){
-console.log('cancel');
-}
+
 
 
 
 </script>
 
-<div class={`qWrap center column ${qWrapClass}`}>
+<div class="qWrap center column">
 
     <h1>{dummyLinked.qText}</h1>
 
+<!-- categories -->
 
 <div class="categories center">
     {#each dummyLinked.qCategories as qCat}
-        <div 
-        id={qCat.qCatId}
-        class={qCat.qCatId === whichCat ? 'selected' : ''}
-        draggable="true"
-        on:pointerdown={()=>{start(qCat.qCatId)}}
-        >
-        {#if dummyLinked.options.find(op=> op.userCat===whichCat)}
-        <h1 
-        class='btn faint'>{qCat.qCatText}
+    <div 
+    id={qCat.qCatId}
+    class={ qCat.isUsed 
+            ? 'faint'
+            : qCat === whichCat 
+                ? 'selected' 
+                : ''}
+    draggable="true"
+    on:pointerdown={()=>{whichCat = qCat }}
+    >
+    {#if dummyLinked.options.find(op=> op.userCat===whichCat)}
+    <h1 
+    class='btn faint'>{qCat.qCatText}
         </h1>
         {/if}
         <h1 
         class='btn'>{qCat.qCatText}
-        </h1>
-    </div>
-    {/each}
+    </h1>
+</div>
+{/each}
 </div>
 
-<div class="faint">Drag each onto its match below</div>
+<div class="faint">Tap each word, then tap its meaning below</div>
+
+<!-- options -->
 
 <div class="optionsForLinking center">
     {#each dummyLinked.options as option}
@@ -148,13 +144,19 @@ console.log('cancel');
         class='option big bold rounded center column'
         on:pointerdown={
             ()=>{
-                option.userCat = dummyLinked.qCategories.find(qCat => qCat.qCatId === whichCat ).qCatText
-                match(option.opId)
+                if (!whichCat) return
+
+                studentAnswer[option.opId] = whichCat.qCatText
+
+                whichCat.isUsed = true
+
+                checkAnswer()
+                whichCat = false // reset
             } }
         >
-        {#if (option.userCat )}
+        {#if (studentAnswer[option.opId] )}
             <h1 class='btn'>
-            {option.userCat}
+            {studentAnswer[option.opId]}
             </h1>
          {/if}   
         {option.opText}
