@@ -3,12 +3,12 @@
   </script>
 
 
-<main class='center'>
+<main class='center column'>
 <nav>nav</nav>
 <slot />
 
 </main>
-<footer class='center'>
+<footer class='center column'>
     <div>12 questions created for KS3 learners by</div>
     <div><img src={logo} alt=""></div>
     
@@ -23,6 +23,7 @@
         
         color:white;
         position: relative;
+        gap: 2rem;
     }
     nav{
         position: absolute;

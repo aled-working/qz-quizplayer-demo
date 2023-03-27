@@ -19,16 +19,37 @@ body {
 h1,
 h2,
 h3,
-button {
+button,
+.btn {
 	font-family: "Playfair Display", serif;
+    padding:0;
+    margin:0;
 }
 
 .center {
 	display: flex;
-    flex-direction: column;
 	justify-content: center;
 	align-items: center;
 }
+.column {
+    flex-direction: column; 
+}
 .faint {
     opacity: .5;
+}
+
+button, .btn {
+    border: none;
+    background: white;
+    padding: 0 2rem;
+    border-radius: 4rem;
+    color: var(--pearson-blue);
+    padding: 1rem 2rem
+}  
+.big{
+    font-size: 1.3rem;
+}
+.bold { font-weight: bold;}
+.rounded {
+    border-radius: 1rem;
 }
