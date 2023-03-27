@@ -4,7 +4,10 @@
 
 
 <main class='center column'>
-<nav><a href="/linking">linking</a></nav>
+<nav class='center'>
+    <a href="/multiple-choice">multiple choice</a>
+    <a href="/linking">linking</a>
+</nav>
 <slot />
 
 </main>
@@ -29,6 +32,7 @@
         position: absolute;
         top:0;
         padding: 1rem;
+        gap: 1rem
     }
     footer{
         color: var(--pearson-blue);

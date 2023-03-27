@@ -113,15 +113,16 @@ function checkAnswer(){
     <div 
     id={qCat.qCatId}
     class={ qCat.isUsed 
-            ? 'faint'
+            ? 'qCat usedCat'
             : qCat === whichCat 
-                ? 'selected' 
+                ? 'qCat selected' 
                 : ''}
     draggable="true"
     on:pointerdown={()=>{whichCat = qCat }}
     >
     {#if dummyLinked.options.find(op=> op.userCat===whichCat)}
     <h1 
+    
     class='btn faint'>{qCat.qCatText}
         </h1>
         {/if}
@@ -155,7 +156,9 @@ function checkAnswer(){
             } }
         >
         {#if (studentAnswer[option.opId] )}
-            <h1 class='btn'>
+            <h1 
+            
+            class='btn'>
             {studentAnswer[option.opId]}
             </h1>
          {/if}   
@@ -175,6 +178,15 @@ function checkAnswer(){
     flex-wrap: wrap;
     max-width: 50rem;
     cursor: grab;
+}
+.qCat h1{
+    font-size:2rem;
+    transition: all .5s ease;
+    overflow: hidden;
+}
+.usedCat h1{
+    font-size:0;
+    padding:0;
 }
 .optionsForLinking{
     gap: 1rem;
