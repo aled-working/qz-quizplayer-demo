@@ -4,7 +4,7 @@
 
 
 <main class='center column'>
-<nav>nav</nav>
+<nav><a href="/linking">linking</a></nav>
 <slot />
 
 </main>

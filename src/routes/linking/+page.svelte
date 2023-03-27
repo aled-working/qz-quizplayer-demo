@@ -72,8 +72,11 @@ const dummyLinked = {
 
 
 let userAnswer = {}
+let userAnswerLookup = {}
+let optionsState = {}
 let whichCat = false
-let qWrapClass = ''
+let whichCatText = false
+let qWrapClass = '' //// ????
 
 function start(cat){
     whichCat = cat
@@ -82,21 +85,25 @@ function start(cat){
 }
 function match(option){
     if (!whichCat) return
-    // collect user answers until complete, then check against dummyLinked.correctAnswer
+
+    // collect user answers until complete..., 
     userAnswer[whichCat] = option
+    optionsState[option]= whichCat ////////
+    console.log('optionsState',optionsState); /////
+
+
     let numCats = dummyLinked.qCategories.length
     let numUserAnswersSoFar = Object.keys(userAnswer).length
-
-    console.log('numUserAnswersSoFar',numUserAnswersSoFar);
     if (numUserAnswersSoFar === numCats) {
-        console.log('checking');
+        //then check against dummyLinked.correctAnswer
         let numCorrect = 0
         Object.keys(userAnswer).forEach(k=> {if(userAnswer[k] === dummyLinked.correctAnswer[k])
-                {numCorrect +=1; console.log('numCorrect', numCorrect)}})
+                {numCorrect +=1}})
         if (numCorrect === numCats)     console.log('SUCCESS');   
         if (numCorrect !== numCats)     console.log('NOT QUITE');   
-
     }
+    //reset
+    whichCat = false
 }
 function cancel(){
 console.log('cancel');
@@ -115,9 +122,15 @@ console.log('cancel');
     {#each dummyLinked.qCategories as qCat}
         <div 
         id={qCat.qCatId}
+        class={qCat.qCatId === whichCat ? 'selected' : ''}
         draggable="true"
-        on:pointerdown={()=>start(qCat.qCatId)}
+        on:pointerdown={()=>{start(qCat.qCatId)}}
         >
+        {#if dummyLinked.options.find(op=> op.userCat===whichCat)}
+        <h1 
+        class='btn faint'>{qCat.qCatText}
+        </h1>
+        {/if}
         <h1 
         class='btn'>{qCat.qCatText}
         </h1>
@@ -129,11 +142,21 @@ console.log('cancel');
 
 <div class="optionsForLinking center">
     {#each dummyLinked.options as option}
+        
         <div 
         id={option.opId} 
-        class='option big bold rounded center'
-        on:pointerdown={()=>match(option.opId)}
+        class='option big bold rounded center column'
+        on:pointerdown={
+            ()=>{
+                option.userCat = dummyLinked.qCategories.find(qCat => qCat.qCatId === whichCat ).qCatText
+                match(option.opId)
+            } }
         >
+        {#if (option.userCat )}
+            <h1 class='btn'>
+            {option.userCat}
+            </h1>
+         {/if}   
         {option.opText}
     </div>
     {/each}
@@ -142,10 +165,10 @@ console.log('cancel');
 
 
 <style>
-    .qWrap{
-        gap: 2rem
+.qWrap{
+    gap: 2rem
     }
-    .categories{
+.categories{
     gap: .3rem;
     flex-wrap: wrap;
     max-width: 50rem;
@@ -163,6 +186,12 @@ console.log('cancel');
     border: 2px dashed #ffffff33;
     padding: .5rem;
     width: 15rem
+}
+.optionsForLinking .option:hover{
+    border: 2px solid yellow
+}
+.selected h1 {
+    background: yellow
 }
 
 </style>
