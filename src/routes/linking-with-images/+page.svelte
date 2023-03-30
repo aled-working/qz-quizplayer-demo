@@ -14,66 +14,39 @@ const dummyLinked = {
         qCat05: 'op00',
     }, */
     correctAnswer: {
-        op00:'Skeleton',
-        op01:'Leaf',
-        op02:'Heart',
-        op03:'Nutrient',
-        op04:'Root',
-        op05:'Digestion',
+        op00:'Artery',
+        op02:'Leaf',
+        op04:'Nutrient',
     },
     type: 'linked',
     qText: 'Which ones match?',
 
     qCategories: [
         { 
-            qCatText: 'Heart',
+            qCatText: 'Artery ',
             qCatId: 'qCat00'
         },
         { 
-            qCatText: 'Root',
+            qCatText: 'Leaf',
             qCatId: 'qCat01'
         },
         { 
-            qCatText: 'Leaf',
-            qCatId: 'qCat02'
-        },
-        { 
-            qCatText: 'Digestion',
-            qCatId: 'qCat03'
-        },
-        { 
             qCatText: 'Nutrient',
-            qCatId: 'qCat04'
-        },
-        { 
-            qCatText: 'Skeleton',
-            qCatId: 'qCat05'
+            qCatId: 'qCat02'
         },
 ],
     options: [
-        { 
-            opText: 'A framework of bones that hold together a plant or animal',
-            opId: 'op00'
-        },
         { 
             opText: 'A green part of a plant attached to the stem, where gases enter and leave the plant',
             opId: 'op01'
         },
         { 
-            opText: 'A large muscle that pumps blood around the body',
+            opText: 'A substance that is essential for an organism to grow and live',
             opId: 'op02'
         },
         { 
-            opText: 'A substance that is essential for an organism to grow and live',
+            opText: 'A muscular tube that transports blood from the heart to all parts of the body.',
             opId: 'op03'
-        },
-        { 
-            opText: 'The part of a plant which attaches it to the ground, and allows the plant to absorb water and nutrients',
-            opId: 'op04'
-        },
-        { 
-            opText: 'The process of breaking down food into nutrients that can be absorbed by the body',
-            opId: 'op05'
         },
 ]
 } // end dummy data

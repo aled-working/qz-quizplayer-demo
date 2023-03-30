@@ -8,14 +8,18 @@
 :root{
     --pearson-blue: hsla(193, 100%, 39%, 1);
     --pearson-deeper-blue: hsla(193, 100%, 31%, 1);
+    --correct-color: darkcyan;
+    --wrong-color: red;
+    --text-color: white;
 }
+
 body {
 	margin: 0;
 	padding: 0;
 	font-family: "Open Sans", sans-serif;
     text-align: center;
     max-width: 100vw;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 a{
@@ -26,8 +30,7 @@ a{
 h1,
 h2,
 h3,
-button,
-.btn {
+button {
 	font-family: "Playfair Display", serif;
     padding:0;
     margin:0;
@@ -48,6 +51,9 @@ h1{
 .faint {
     opacity: .5;
 }
+.trans {
+    opacity: 0;
+}
 
 button, .btn {
     border: none;
@@ -55,8 +61,13 @@ button, .btn {
     padding: 0 2rem;
     border-radius: 4rem;
     color: var(--pearson-blue);
-    padding: 1rem 2rem
+    padding: 1rem 2rem;
+    transition: all .2s;
+    position: relative;
 }  
+.option {
+    transition: all .2s;
+}
 .big{
     font-size: 1.3rem;
 }
@@ -64,3 +75,14 @@ button, .btn {
 .rounded {
     border-radius: 1rem;
 }
+
+
+/******** STATES ********/
+.btn:hover,
+.option:hover {
+    scale:1.2;
+    z-index: 9;
+    /* box-shadow: var(--base-deeper-color) 0px 20px 30px -10px; */
+    box-shadow: #00000022 0px 20px 30px -10px;
+}
+
