@@ -1,4 +1,7 @@
 <script>
+    import artery from '$lib/assets/linked-cat-IMG-artery.jpg';
+    import leaf from '$lib/assets/linked-cat-IMG-leaf.jpg';
+    import nutrient from '$lib/assets/linked-cat-IMG-nutrient.jpg';
 
 /* youtube  https://www.youtube.com/watch?v=aZzGvfnw8Zw */
 // https://medium.com/codex/things-ive-learned-building-a-drag-drop-component-with-svelte-2ad9169f1aff
@@ -24,15 +27,18 @@ const dummyLinked = {
     qCategories: [
         { 
             qCatText: 'Artery ',
-            qCatId: 'qCat00'
+            qCatId: 'qCat00',
+            qCatImg: artery
         },
         { 
             qCatText: 'Leaf',
-            qCatId: 'qCat01'
+            qCatId: 'qCat01',
+            qCatImg: leaf,
         },
         { 
             qCatText: 'Nutrient',
-            qCatId: 'qCat02'
+            qCatId: 'qCat02',
+            qCatImg: nutrient
         },
 ],
     options: [
@@ -84,29 +90,28 @@ function checkAnswer(){
 <div class="categories center">
     {#each dummyLinked.qCategories as qCat}
     <div 
-    id={qCat.qCatId}
-    class={ qCat.isUsed 
-            ? 'qCat usedCatx faint'
-            : qCat === whichCat 
-                ? 'qCat selected' 
-                : ''}
-    draggable="true"
-    on:pointerdown={()=>{whichCat = qCat }}
+        id={qCat.qCatId}
+        class={ qCat.isUsed 
+                ? 'qCat usedCat faint'
+                : qCat === whichCat 
+                    ? 'qCat selected' 
+                    : 'qCat'}
+        draggable="true"
+        on:pointerdown={()=>{whichCat = qCat }}
     >
-    {#if dummyLinked.options.find(op=> op.userCat===whichCat)}
-    <h1 
-    
-    class='btn faint'>{qCat.qCatText}
-        </h1>
-        {/if}
-        <h1 
+    <img src={qCat.qCatImg} alt="">
+    <!-- <h1 
         class='btn'>{qCat.qCatText}
-    </h1>
+    </h1> -->
 </div>
 {/each}
 </div>
 
-<div class="faint">Tap each word, then tap its meaning below</div>
+
+
+<div class="faint">Tap an image, then tap its description</div>
+
+
 
 <!-- options -->
 
@@ -151,7 +156,7 @@ function checkAnswer(){
     gap: 2rem
     }
 .categories{
-    gap: .3rem;
+    gap: 2rem;
     flex-wrap: wrap;
     max-width: 50rem;
     cursor: grab;
@@ -161,10 +166,7 @@ function checkAnswer(){
     transition: all .5s ease;
     overflow: hidden;
 }
-.usedCat h1{
-    font-size:0;
-    padding:0;
-}
+
 .optionsForLinking{
     gap: 1rem;
     align-items: flex-start;
@@ -183,6 +185,33 @@ function checkAnswer(){
 }
 .selected h1 {
     background: yellow
+}
+.qCat img{
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    transition: all .5s ease;
+    border:.5rem solid white;
+}
+.qCat .btn img{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border:none
+}
+.qCat:hover img
+{
+    scale: 1.7;
+    /* border: .5rem solid yellow; */
+}
+.qCat.selected img
+{
+    scale: 1.7;
+    border: .5rem solid yellow;
+}
+.usedCat img{
+    scale: 0.8;
+    border: .5rem solid yellow;
 }
 
 

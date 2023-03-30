@@ -120,14 +120,9 @@ function checkAnswer(){
     draggable="true"
     on:pointerdown={()=>{whichCat = qCat }}
     >
-    {#if dummyLinked.options.find(op=> op.userCat===whichCat)}
-    <h1 
-    
-    class='btn faint'>{qCat.qCatText}
-        </h1>
-        {/if}
-        <h1 
-        class='btn'>{qCat.qCatText}
+ 
+    <h1 class='btn'>
+        {qCat.qCatText}
     </h1>
 </div>
 {/each}
